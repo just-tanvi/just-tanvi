@@ -206,7 +206,7 @@ function buildSvg(weeks, user) {
       calcMode="linear"/>
   </g>
 
-  <text x="${PADDING_LEFT}" y="${height - 1}">@${user} — Mario runs your contribution graph 🎮 (green = landable, dark = not)</text>
+  <text x="${PADDING_LEFT}" y="${height - 1}">@${user} —  watch mario parkour !</text>
 </svg>`;
 
   return svg;

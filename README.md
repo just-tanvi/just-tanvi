@@ -16,6 +16,6 @@ I engineered a cross-browser extension for real-time claim verification, optimiz
 [Email](mailto:tanvitiwari0606@gmail.com) &nbsp;·&nbsp; [LinkedIn](https://linkedin.com/in/tanvi-tiwari-)
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="output/mario-dark.svg">
-  <img alt="Mario contribution graph" src="output/mario.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="output/mario-dark.svg?v=3">
+  <img alt="Mario contribution graph" src="output/mario.svg?v=3">
 </picture>

@@ -14,3 +14,8 @@ I engineered a cross-browser extension for real-time claim verification, optimiz
 **Stack** &nbsp;—&nbsp; <a href="https://skillicons.dev"><img src="https://skillicons.dev/icons?i=aws,fastapi,react,nextjs,html,css,python,js,ts,java,git,github,figma,vscode,docker,githubactions,netlify,mongodb,firebase,supabase,postgres,mysql,redis,sqlite,nodejs&perline=14" /></a>
 
 [Email](mailto:tanvitiwari0606@gmail.com) &nbsp;·&nbsp; [LinkedIn](https://linkedin.com/in/tanvi-tiwari-)
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="output/mario-dark.svg">
+  <img alt="Mario contribution graph" src="output/mario.svg">
+</picture>

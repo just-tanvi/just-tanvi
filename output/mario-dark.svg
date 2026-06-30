@@ -502,5 +502,274 @@
       repeatCount="indefinite"
       calcMode="linear"/>
   </g>
+
+  <!-- points floating animation -->
+  
+  <text x="43.0" y="61.0" opacity="0" font-family="'Courier New', Courier, monospace" font-weight="bold" font-size="8px" fill="#e3b341" text-anchor="middle">
+    +30
+    <animate attributeName="opacity"
+      values="0;0;1;0;0"
+      keyTimes="0;0.0620;0.0620;0.0770;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+    <animate attributeName="y"
+      values="61.0;61.0;49.0;49.0"
+      keyTimes="0;0.0620;0.0770;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+  </text>
+  
+  <text x="85.0" y="106.0" opacity="0" font-family="'Courier New', Courier, monospace" font-weight="bold" font-size="8px" fill="#e3b341" text-anchor="middle">
+    +10
+    <animate attributeName="opacity"
+      values="0;0;1;0;0"
+      keyTimes="0;0.1111;0.1111;0.1261;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+    <animate attributeName="y"
+      values="106.0;106.0;94.0;94.0"
+      keyTimes="0;0.1111;0.1261;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+  </text>
+  
+  <text x="99.0" y="106.0" opacity="0" font-family="'Courier New', Courier, monospace" font-weight="bold" font-size="8px" fill="#e3b341" text-anchor="middle">
+    +10
+    <animate attributeName="opacity"
+      values="0;0;1;0;0"
+      keyTimes="0;0.1275;0.1275;0.1425;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+    <animate attributeName="y"
+      values="106.0;106.0;94.0;94.0"
+      keyTimes="0;0.1275;0.1425;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+  </text>
+  
+  <text x="133.0" y="46.0" opacity="0" font-family="'Courier New', Courier, monospace" font-weight="bold" font-size="8px" fill="#e3b341" text-anchor="middle">
+    +30
+    <animate attributeName="opacity"
+      values="0;0;1;0;0"
+      keyTimes="0;0.1673;0.1673;0.1823;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+    <animate attributeName="y"
+      values="46.0;46.0;34.0;34.0"
+      keyTimes="0;0.1673;0.1823;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+  </text>
+  
+  <text x="145.0" y="31.0" opacity="0" font-family="'Courier New', Courier, monospace" font-weight="bold" font-size="8px" fill="#e3b341" text-anchor="middle">
+    +30
+    <animate attributeName="opacity"
+      values="0;0;1;0;0"
+      keyTimes="0;0.1813;0.1813;0.1963;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+    <animate attributeName="y"
+      values="31.0;31.0;19.0;19.0"
+      keyTimes="0;0.1813;0.1963;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+  </text>
+  
+  <text x="162.0" y="76.0" opacity="0" font-family="'Courier New', Courier, monospace" font-weight="bold" font-size="8px" fill="#e3b341" text-anchor="middle">
+    +10
+    <animate attributeName="opacity"
+      values="0;0;1;0;0"
+      keyTimes="0;0.2012;0.2012;0.2162;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+    <animate attributeName="y"
+      values="76.0;76.0;64.0;64.0"
+      keyTimes="0;0.2012;0.2162;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+  </text>
+  
+  <text x="190.0" y="106.0" opacity="0" font-family="'Courier New', Courier, monospace" font-weight="bold" font-size="8px" fill="#e3b341" text-anchor="middle">
+    +100
+    <animate attributeName="opacity"
+      values="0;0;1;0;0"
+      keyTimes="0;0.2339;0.2339;0.2489;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+    <animate attributeName="y"
+      values="106.0;106.0;94.0;94.0"
+      keyTimes="0;0.2339;0.2489;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+  </text>
+  
+  <text x="236.0" y="91.0" opacity="0" font-family="'Courier New', Courier, monospace" font-weight="bold" font-size="8px" fill="#e3b341" text-anchor="middle">
+    +10
+    <animate attributeName="opacity"
+      values="0;0;1;0;0"
+      keyTimes="0;0.2877;0.2877;0.3027;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+    <animate attributeName="y"
+      values="91.0;91.0;79.0;79.0"
+      keyTimes="0;0.2877;0.3027;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+  </text>
+  
+  <text x="283.0" y="31.0" opacity="0" font-family="'Courier New', Courier, monospace" font-weight="bold" font-size="8px" fill="#e3b341" text-anchor="middle">
+    +50
+    <animate attributeName="opacity"
+      values="0;0;1;0;0"
+      keyTimes="0;0.3427;0.3427;0.3577;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+    <animate attributeName="y"
+      values="31.0;31.0;19.0;19.0"
+      keyTimes="0;0.3427;0.3577;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+  </text>
+  
+  <text x="358.0" y="31.0" opacity="0" font-family="'Courier New', Courier, monospace" font-weight="bold" font-size="8px" fill="#e3b341" text-anchor="middle">
+    +10
+    <animate attributeName="opacity"
+      values="0;0;1;0;0"
+      keyTimes="0;0.4304;0.4304;0.4454;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+    <animate attributeName="y"
+      values="31.0;31.0;19.0;19.0"
+      keyTimes="0;0.4304;0.4454;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+  </text>
+  
+  <text x="523.0" y="46.0" opacity="0" font-family="'Courier New', Courier, monospace" font-weight="bold" font-size="8px" fill="#e3b341" text-anchor="middle">
+    +10
+    <animate attributeName="opacity"
+      values="0;0;1;0;0"
+      keyTimes="0;0.6234;0.6234;0.6384;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+    <animate attributeName="y"
+      values="46.0;46.0;34.0;34.0"
+      keyTimes="0;0.6234;0.6384;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+  </text>
+  
+  <text x="580.0" y="106.0" opacity="0" font-family="'Courier New', Courier, monospace" font-weight="bold" font-size="8px" fill="#e3b341" text-anchor="middle">
+    +30
+    <animate attributeName="opacity"
+      values="0;0;1;0;0"
+      keyTimes="0;0.6901;0.6901;0.7051;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+    <animate attributeName="y"
+      values="106.0;106.0;94.0;94.0"
+      keyTimes="0;0.6901;0.7051;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+  </text>
+  
+  <text x="594.0" y="106.0" opacity="0" font-family="'Courier New', Courier, monospace" font-weight="bold" font-size="8px" fill="#e3b341" text-anchor="middle">
+    +100
+    <animate attributeName="opacity"
+      values="0;0;1;0;0"
+      keyTimes="0;0.7064;0.7064;0.7214;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+    <animate attributeName="y"
+      values="106.0;106.0;94.0;94.0"
+      keyTimes="0;0.7064;0.7214;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+  </text>
+  
+  <text x="730.0" y="106.0" opacity="0" font-family="'Courier New', Courier, monospace" font-weight="bold" font-size="8px" fill="#e3b341" text-anchor="middle">
+    +10
+    <animate attributeName="opacity"
+      values="0;0;1;0;0"
+      keyTimes="0;0.8655;0.8655;0.8805;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+    <animate attributeName="y"
+      values="106.0;106.0;94.0;94.0"
+      keyTimes="0;0.8655;0.8805;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+  </text>
+  
+  <text x="746.0" y="76.0" opacity="0" font-family="'Courier New', Courier, monospace" font-weight="bold" font-size="8px" fill="#e3b341" text-anchor="middle">
+    +30
+    <animate attributeName="opacity"
+      values="0;0;1;0;0"
+      keyTimes="0;0.8842;0.8842;0.8992;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+    <animate attributeName="y"
+      values="76.0;76.0;64.0;64.0"
+      keyTimes="0;0.8842;0.8992;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+  </text>
+  
+  <text x="759.0" y="76.0" opacity="0" font-family="'Courier New', Courier, monospace" font-weight="bold" font-size="8px" fill="#e3b341" text-anchor="middle">
+    +10
+    <animate attributeName="opacity"
+      values="0;0;1;0;0"
+      keyTimes="0;0.8994;0.8994;0.9144;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+    <animate attributeName="y"
+      values="76.0;76.0;64.0;64.0"
+      keyTimes="0;0.8994;0.9144;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+  </text>
+  
+  <text x="776.0" y="46.0" opacity="0" font-family="'Courier New', Courier, monospace" font-weight="bold" font-size="8px" fill="#e3b341" text-anchor="middle">
+    +10
+    <animate attributeName="opacity"
+      values="0;0;1;0;0"
+      keyTimes="0;0.9193;0.9193;0.9343;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+    <animate attributeName="y"
+      values="46.0;46.0;34.0;34.0"
+      keyTimes="0;0.9193;0.9343;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+  </text>
+  
+  <text x="789.0" y="46.0" opacity="0" font-family="'Courier New', Courier, monospace" font-weight="bold" font-size="8px" fill="#e3b341" text-anchor="middle">
+    +50
+    <animate attributeName="opacity"
+      values="0;0;1;0;0"
+      keyTimes="0;0.9345;0.9345;0.9495;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+    <animate attributeName="y"
+      values="46.0;46.0;34.0;34.0"
+      keyTimes="0;0.9345;0.9495;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+  </text>
+  
+  <text x="804.0" y="46.0" opacity="0" font-family="'Courier New', Courier, monospace" font-weight="bold" font-size="8px" fill="#e3b341" text-anchor="middle">
+    +100
+    <animate attributeName="opacity"
+      values="0;0;1;0;0"
+      keyTimes="0;0.9520;0.9520;0.9670;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+    <animate attributeName="y"
+      values="46.0;46.0;34.0;34.0"
+      keyTimes="0;0.9520;0.9670;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+  </text>
+
   <text x="20" y="158">@just-tanvi —  watch mario parkour !</text>
 </svg>

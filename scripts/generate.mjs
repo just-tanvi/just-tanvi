@@ -331,6 +331,47 @@ function buildSvg(weeks, user) {
   });
   const shellSvgsStr = shellSvgs.join("\n  ");
 
+  // Floating score points generation
+  const pointTexts = [];
+  const pointsColor = isDark ? "#e3b341" : "#b58900";
+
+  // Real columns are from index 1 to numWeeks
+  for (let i = 1; i <= numWeeks; i++) {
+    const col = columns[i];
+    if (col.isGround) continue; // no points on ground
+
+    const c = i - 1;
+    const week = weeks[c];
+    const bestRow = Math.round((col.y + MARIO_OFFSET_Y - PADDING_TOP) / STEP);
+    const day = week[bestRow];
+    if (!day || day.level === 0) continue;
+
+    const pointsMap = { 1: "+10", 2: "+30", 3: "+50", 4: "+100" };
+    const score = pointsMap[day.level] || "+10";
+
+    const x = col.xEntry;
+    const yStart = col.y - 18;
+
+    const tStart = (col.xEntry - xStart) / totalX;
+    const tEnd = Math.min(0.9999, tStart + 0.015);
+
+    pointTexts.push(`
+  <text x="${x.toFixed(1)}" y="${yStart.toFixed(1)}" opacity="0" font-family="'Courier New', Courier, monospace" font-weight="bold" font-size="8px" fill="${pointsColor}" text-anchor="middle">
+    ${score}
+    <animate attributeName="opacity"
+      values="0;0;1;0;0"
+      keyTimes="0;${tStart.toFixed(4)};${tStart.toFixed(4)};${tEnd.toFixed(4)};1"
+      dur="${totalDuration}s"
+      repeatCount="indefinite"/>
+    <animate attributeName="y"
+      values="${yStart.toFixed(1)};${yStart.toFixed(1)};${(yStart - 12).toFixed(1)};${(yStart - 12).toFixed(1)}"
+      keyTimes="0;${tStart.toFixed(4)};${tEnd.toFixed(4)};1"
+      dur="${totalDuration}s"
+      repeatCount="indefinite"/>
+  </text>`);
+  }
+  const pointTextsStr = pointTexts.join("\n  ");
+
   // Simple 16x16-ish blocky Mario built from rects
   const mario = `
   <g id="mario">
@@ -377,6 +418,10 @@ function buildSvg(weeks, user) {
       repeatCount="indefinite"
       calcMode="linear"/>
   </g>
+
+  <!-- points floating animation -->
+  ${pointTextsStr}
+
   <text x="${PADDING_LEFT}" y="${height - 2}">@${user} —  watch mario parkour !</text>
 </svg>`;
 

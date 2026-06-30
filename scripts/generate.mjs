@@ -179,15 +179,17 @@ function buildSvg(weeks, user) {
 
   const hazardCols = [];
   if (candidateHazards.length > 0) {
-    if (candidateHazards.length === 1) {
-      hazardCols.push(candidateHazards[0]);
+    if (candidateHazards.length <= 4) {
+      hazardCols.push(...candidateHazards);
     } else {
-      const mid = Math.floor(candidateHazards.length / 2);
-      hazardCols.push(candidateHazards[Math.floor(mid / 2)]);
-      hazardCols.push(candidateHazards[mid + Math.floor((candidateHazards.length - mid) / 2)]);
+      // Pick 4 evenly spaced hazards
+      const step = Math.floor(candidateHazards.length / 4);
+      for (let k = 0; k < 4; k++) {
+        hazardCols.push(candidateHazards[k * step + Math.floor(step / 2)]);
+      }
     }
   } else {
-    // Fallback to single ground columns if no stretches of 3 exist
+    // Fallback to single ground columns
     const singleGrounds = [];
     for (let c = 1; c < numWeeks - 1; c++) {
       if (columns[c].isGround) {
@@ -195,7 +197,36 @@ function buildSvg(weeks, user) {
       }
     }
     if (singleGrounds.length > 0) {
-      hazardCols.push(singleGrounds[Math.floor(singleGrounds.length / 2)]);
+      const count = Math.min(4, singleGrounds.length);
+      const step = Math.floor(singleGrounds.length / count);
+      for (let k = 0; k < count; k++) {
+        hazardCols.push(singleGrounds[k * step + Math.floor(step / 2)]);
+      }
+    }
+  }
+
+  // Define initial horizontal entry/exit coordinates for each column
+  for (let i = 0; i < columns.length; i++) {
+    const col = columns[i];
+    col.xEntry = col.left + (col.isGround ? 0 : 4);
+    col.xExit = col.right - (col.isGround ? 0 : 4);
+  }
+
+  // Adjust entry/exit offsets dynamically based on vertical jump height dy to expand horizontal span of jumps
+  for (let i = 0; i < columns.length - 1; i++) {
+    const col = columns[i];
+    const nextCol = columns[i + 1];
+    const shouldJump = !col.isGround || !nextCol.isGround;
+
+    if (shouldJump) {
+      const dy = Math.abs(col.y - nextCol.y);
+      const adjustment = Math.min(4, Math.floor(dy / 15) * 1.0);
+      if (!col.isGround) {
+        col.xExit -= adjustment;
+      }
+      if (!nextCol.isGround) {
+        nextCol.xEntry += adjustment;
+      }
     }
   }
 
@@ -205,42 +236,31 @@ function buildSvg(weeks, user) {
     const col = columns[i];
     const isHazard = hazardCols.includes(i);
 
-    // Entry point: if ground, walk full span; if green block, start/end offset
-    const landOffset = col.isGround ? 0 : 4;
-    const departOffset = col.isGround ? 0 : 4;
-
-    const xEntry = col.left + landOffset;
-    const xExit = col.right - departOffset;
-
     // Land/start walking flat on this column
-    keyframes.push({ x: xEntry, y: col.y });
+    keyframes.push({ x: col.xEntry, y: col.y });
 
     if (isHazard) {
       // Mario jumps OVER the shell inside this column!
-      const xApex = (xEntry + xExit) / 2;
+      const xApex = (col.xEntry + col.xExit) / 2;
       let yApex = col.y - jumpHeight;
       yApex = Math.max(16, yApex);
       keyframes.push({ x: xApex, y: yApex });
     }
 
     // End walking flat on this column
-    keyframes.push({ x: xExit, y: col.y });
+    keyframes.push({ x: col.xExit, y: col.y });
 
     // Transition to the next column
     if (i < columns.length - 1) {
       const nextCol = columns[i + 1];
-      
-      // We jump if either column is a green block.
-      // If both are ground, we do not jump (flat walk).
       const shouldJump = !col.isGround || !nextCol.isGround;
 
       if (shouldJump) {
-        // Find entry/exit offsets for transition
-        const nextLandOffset = nextCol.isGround ? 0 : 4;
-        const nextXEntry = nextCol.left + nextLandOffset;
-
-        const xApex = (xExit + nextXEntry) / 2;
-        let yApex = Math.min(col.y, nextCol.y) - jumpHeight;
+        const xApex = (col.xExit + nextCol.xEntry) / 2;
+        const dy = Math.abs(col.y - nextCol.y);
+        // Reduce the additional jump height for large vertical climbs to make them smoother
+        const currentJumpHeight = dy > 30 ? Math.max(8, jumpHeight - Math.floor(dy / 5)) : jumpHeight;
+        let yApex = Math.min(col.y, nextCol.y) - currentJumpHeight;
         yApex = Math.max(16, yApex);
         keyframes.push({ x: xApex, y: yApex });
       }

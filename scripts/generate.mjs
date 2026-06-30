@@ -220,13 +220,24 @@ function buildSvg(weeks, user) {
 
     if (shouldJump) {
       const dy = Math.abs(col.y - nextCol.y);
-      const adjustment = Math.min(4, Math.floor(dy / 15) * 1.0);
+      const adjustment = Math.min(2, Math.floor(dy / 15) * 0.5);
       if (!col.isGround) {
         col.xExit -= adjustment;
       }
       if (!nextCol.isGround) {
         nextCol.xEntry += adjustment;
       }
+    }
+  }
+
+  // Guarantee that xEntry is always strictly less than xExit to prevent keytimes from going backwards!
+  for (let i = 0; i < columns.length; i++) {
+    const col = columns[i];
+    const minFlatWalk = col.isGround ? 4 : 2;
+    if (col.xExit < col.xEntry + minFlatWalk) {
+      const mid = (col.xEntry + col.xExit) / 2;
+      col.xEntry = mid - minFlatWalk / 2;
+      col.xExit = mid + minFlatWalk / 2;
     }
   }
 

@@ -169,24 +169,78 @@ function buildSvg(weeks, user) {
     isGround: true,
   });
 
+  // Identify candidate columns for shell hazards
+  const candidateHazards = [];
+  for (let c = 1; c < numWeeks - 1; c++) {
+    if (columns[c].isGround && columns[c - 1].isGround && columns[c + 1].isGround) {
+      candidateHazards.push(c);
+    }
+  }
+
+  const hazardCols = [];
+  if (candidateHazards.length > 0) {
+    if (candidateHazards.length === 1) {
+      hazardCols.push(candidateHazards[0]);
+    } else {
+      const mid = Math.floor(candidateHazards.length / 2);
+      hazardCols.push(candidateHazards[Math.floor(mid / 2)]);
+      hazardCols.push(candidateHazards[mid + Math.floor((candidateHazards.length - mid) / 2)]);
+    }
+  } else {
+    // Fallback to single ground columns if no stretches of 3 exist
+    const singleGrounds = [];
+    for (let c = 1; c < numWeeks - 1; c++) {
+      if (columns[c].isGround) {
+        singleGrounds.push(c);
+      }
+    }
+    if (singleGrounds.length > 0) {
+      hazardCols.push(singleGrounds[Math.floor(singleGrounds.length / 2)]);
+    }
+  }
+
   // Build keyframes sequence
   const keyframes = [];
   for (let i = 0; i < columns.length; i++) {
     const col = columns[i];
-    // Land at the left edge of the column
-    keyframes.push({ x: col.left, y: col.y });
-    // Walk flat to the right edge of the column
-    keyframes.push({ x: col.right, y: col.y });
+    const isHazard = hazardCols.includes(i);
+
+    // Entry point: if ground, walk full span; if green block, start/end offset
+    const landOffset = col.isGround ? 0 : 4;
+    const departOffset = col.isGround ? 0 : 4;
+
+    const xEntry = col.left + landOffset;
+    const xExit = col.right - departOffset;
+
+    // Land/start walking flat on this column
+    keyframes.push({ x: xEntry, y: col.y });
+
+    if (isHazard) {
+      // Mario jumps OVER the shell inside this column!
+      const xApex = (xEntry + xExit) / 2;
+      let yApex = col.y - jumpHeight;
+      yApex = Math.max(16, yApex);
+      keyframes.push({ x: xApex, y: yApex });
+    }
+
+    // End walking flat on this column
+    keyframes.push({ x: xExit, y: col.y });
 
     // Transition to the next column
     if (i < columns.length - 1) {
       const nextCol = columns[i + 1];
+      
+      // We jump if either column is a green block.
+      // If both are ground, we do not jump (flat walk).
       const shouldJump = !col.isGround || !nextCol.isGround;
 
       if (shouldJump) {
-        const xApex = (col.right + nextCol.left) / 2;
+        // Find entry/exit offsets for transition
+        const nextLandOffset = nextCol.isGround ? 0 : 4;
+        const nextXEntry = nextCol.left + nextLandOffset;
+
+        const xApex = (xExit + nextXEntry) / 2;
         let yApex = Math.min(col.y, nextCol.y) - jumpHeight;
-        // Clamp y to prevent Mario from getting cut off at the top (Mario cap is at y - 16)
         yApex = Math.max(16, yApex);
         keyframes.push({ x: xApex, y: yApex });
       }
@@ -209,6 +263,53 @@ function buildSvg(weeks, user) {
   const keyTimes = uniqueKeyframes.map((k) => ((k.x - xStart) / totalX).toFixed(4)).join(";");
   const values = uniqueKeyframes.map((k) => `${k.x.toFixed(1)},${k.y.toFixed(1)}`).join(";");
   const totalDuration = Math.max(numWeeks * 0.45, 6); // seconds, scales with weeks
+
+  // Shells SVGs generation
+  const shellSvgs = [];
+  const shellDarkColor = isDark ? "#0e4429" : "#216e39";
+  const shellBrightColor = isDark ? "#39d353" : "#40c463";
+  const shellRimColor = isDark ? "#f0f6fc" : "#e1e4e8";
+  const shellUnderColor = isDark ? "#fcb38a" : "#fcf8a8";
+  const shellEyeColor = isDark ? "#161b22" : "#57606a";
+
+  hazardCols.forEach((h) => {
+    const col = columns[h];
+    const xEntry = col.left;
+    const xExit = col.right;
+    
+    // Times
+    const tStart = (xEntry - xStart) / totalX;
+    const tEnd = (xExit - xStart) / totalX;
+    const t0 = Math.max(0.001, tStart - 0.02);
+    const t4 = Math.min(0.999, tEnd + 0.02);
+    const t2 = (tStart + tEnd) / 2;
+
+    shellSvgs.push(`
+  <!-- Shell Hazard at Week ${h} -->
+  <g transform="translate(-100,-100)">
+    <g id="shell-${h}">
+      <!-- green dome -->
+      <rect x="-5" y="-6" width="10" height="6" rx="2" fill="${shellDarkColor}"/>
+      <rect x="-4" y="-8" width="8" height="2" rx="1" fill="${shellDarkColor}"/>
+      <rect x="-3" y="-5" width="6" height="4" fill="${shellBrightColor}"/>
+      <rect x="-2" y="-7" width="4" height="2" fill="${shellBrightColor}"/>
+      <!-- white rim -->
+      <rect x="-6" y="0" width="12" height="2" fill="${shellRimColor}"/>
+      <!-- underside -->
+      <rect x="-4" y="2" width="8" height="4" fill="${shellUnderColor}" rx="1"/>
+      <!-- black holes -->
+      <rect x="-3" y="3" width="2" height="2" fill="${shellEyeColor}"/>
+      <rect x="1" y="3" width="2" height="2" fill="${shellEyeColor}"/>
+    </g>
+    <animateTransform attributeName="transform" type="translate"
+      values="-100.0,-100.0;-100.0,-100.0;${(col.right + 25).toFixed(1)},${(groundY - 6).toFixed(1)};${((col.left + col.right) / 2).toFixed(1)},${(groundY - 6).toFixed(1)};${(col.left - 25).toFixed(1)},${(groundY - 6).toFixed(1)};-100.0,-100.0;-100.0,-100.0"
+      keyTimes="0.0000;${t0.toFixed(4)};${(t0 + 0.0001).toFixed(4)};${t2.toFixed(4)};${t4.toFixed(4)};${(t4 + 0.0001).toFixed(4)};1.0000"
+      dur="${totalDuration}s"
+      repeatCount="indefinite"
+      calcMode="linear"/>
+  </g>`);
+  });
+  const shellSvgsStr = shellSvgs.join("\n  ");
 
   // Simple 16x16-ish blocky Mario built from rects
   const mario = `
@@ -242,6 +343,9 @@ function buildSvg(weeks, user) {
 
   <!-- ground line -->
   <line x1="${PADDING_LEFT - 4}" y1="${groundY}" x2="${width - PADDING_LEFT + 4}" y2="${groundY}" stroke="${groundColor}" stroke-width="1"/>
+
+  <!-- shell hazards -->
+  ${shellSvgsStr}
 
   <!-- Mario -->
   <g transform="translate(${uniqueKeyframes[0].x},${uniqueKeyframes[0].y})">

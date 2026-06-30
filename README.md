@@ -1,16 +1,16 @@
-## Hi there 👋
+# Tanvi Tiwari — Computer science and Engineering student, aspiring ML Engineer
 
-<!--
-**just-tanvi/just-tanvi** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+I engineered a cross-browser extension for real-time claim verification, optimizing asynchronous API orchestration for sub-second latency. I also architected a four-layer ensemble detection pipeline that boosted fraud detection accuracy by 15% for Indian banks, processing 12 years of historical transaction data.
 
-Here are some ideas to get you started:
+---
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+## Work
+
+- **[FaultLine](https://github.com/just-tanvi/FaultLine)** — fraud detection ML model *(Python)*
+- **[Cipher](https://github.com/just-tanvi/Cipher)** — AI powerd fact checking extension *(HTML)*
+
+---
+
+**Stack** &nbsp;—&nbsp; <a href="https://skillicons.dev"><img src="https://skillicons.dev/icons?i=aws,fastapi,react,nextjs,html,css,python,js,ts,java,git,github,figma,vscode,docker,githubactions,netlify,mongodb,firebase,supabase,postgres,mysql,redis,sqlite,nodejs&perline=14" /></a>
+
+[Email](mailto:tanvitiwari0606@gmail.com) &nbsp;·&nbsp; [LinkedIn](https://linkedin.com/in/tanvi-tiwari-)

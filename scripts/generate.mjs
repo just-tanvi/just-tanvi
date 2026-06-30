@@ -23,17 +23,9 @@ if (!username) {
 const CELL = 12;        // cell size (matches GitHub's graph roughly)
 const GAP = 3;          // gap between cells
 const STEP = CELL + GAP;
-const PADDING_TOP = 30; // room for Mario's jump arc above row 0
+const PADDING_TOP = 40; // room for Mario's jump arc above row 0
 const PADDING_LEFT = 20;
-const PADDING_BOTTOM = 10;
-
-const LEVEL_COLORS = {
-  0: "#161b22", // inactive / no contributions -> "black" tile, not landable
-  1: "#0e4429",
-  2: "#006d32",
-  3: "#26a641",
-  4: "#39d353", // most active -> brightest green
-};
+const PADDING_BOTTOM = 15;
 
 async function fetchContributions(user) {
   const url = `https://github-contributions-api.jogruber.de/v4/${user}?y=last`;
@@ -68,101 +60,157 @@ function toWeekGrid(days) {
 function buildSvg(weeks, user) {
   const numWeeks = weeks.length;
   const width = PADDING_LEFT * 2 + numWeeks * STEP;
-  const height = PADDING_TOP + 7 * STEP + PADDING_BOTTOM;
+  
+  // Dynamic theme colors depending on the output file name
+  const isDark = outfile.includes("dark");
+  const LEVEL_COLORS = isDark
+    ? {
+        0: "#161b22",
+        1: "#0e4429",
+        2: "#006d32",
+        3: "#26a641",
+        4: "#39d353",
+      }
+    : {
+        0: "#ebedf0",
+        1: "#9be9a8",
+        2: "#40c463",
+        3: "#30a14e",
+        4: "#216e39",
+      };
 
-  // Flatten into a path-order list: week by week, top (Sunday) to bottom (Saturday),
-  // matching how Mario will traverse left -> right, hopping down/up rows only
-  // when needed to land on green cells. To keep it simple & readable, Mario
-  // runs along ONE horizontal "lane" per loop and we pick, for each week column,
-  // the most active day to determine jump height -- this keeps the animation
-  // readable instead of a chaotic 7-row scramble.
-  const cells = [];
-  weeks.forEach((week, wi) => {
-    // pick the day in this week with the highest level (most "active") as the
-    // platform Mario lands on; if all zero, it's a gap he runs/falls past.
-    let best = null;
-    week.forEach((day) => {
-      if (day && (best === null || day.level > best.level)) best = day;
-    });
-    cells.push({
-      x: PADDING_LEFT + wi * STEP,
-      level: best ? best.level : 0,
-      date: best ? best.date : null,
-      count: best ? best.count : 0,
-    });
-  });
-
+  const groundColor = isDark ? "#30363d" : "#e1e4e8";
+  const cellStrokeColor = isDark ? "rgba(255,255,255,0.05)" : "rgba(27,31,35,0.06)";
+  const textColor = isDark ? "#8b949e" : "#57606a";
   const groundY = PADDING_TOP + 7 * STEP; // baseline Mario runs along when not jumping
+  const height = groundY + PADDING_BOTTOM;
   const jumpHeight = 26;
 
-  // Build the little ground/cell squares (the real contribution-style grid,
-  // collapsed to one row per week using the "best day" level so it doubles
-  // as Mario's track).
-  const cellRects = cells
-    .map((c) => {
-      const y = groundY - CELL;
-      const landable = c.level > 0;
-      return `<rect x="${c.x}" y="${y}" width="${CELL}" height="${CELL}" rx="2" ry="2" fill="${LEVEL_COLORS[c.level]}" stroke="${landable ? "#2ea043" : "#30363d"}" stroke-width="0.5">${c.date ? `<title>${c.date}: ${c.count} contributions</title>` : ""}</rect>`;
-    })
-    .join("\n    ");
-
-  // Animation timeline: Mario moves from cell to cell. For landable (green)
-  // cells he arcs upward (jump) and lands on top of the tile. For inactive
-  // (level 0 / "black") cells he just runs straight through at ground level
-  // (can't land there).
-  const totalDuration = Math.max(numWeeks * 0.45, 6); // seconds, scales with weeks
-  const stepDur = totalDuration / numWeeks;
-
-  const xKeyTimes = [];
-  const xValues = [];
-  const yValues = [];
-
-  cells.forEach((c, i) => {
-    const t = i / numWeeks;
-    const landable = c.level > 0;
-    const standY = groundY - (landable ? CELL : 0); // top of tile or ground line
-    const peakY = standY - jumpHeight;
-
-    xKeyTimes.push(t.toFixed(4));
-    xValues.push(c.x);
-    yValues.push(standY);
-
-    if (landable) {
-      // add an apex point just before reaching this cell, to create the hop arc
-      const tApex = Math.max(t - (1 / numWeeks) * 0.4, 0);
-      xKeyTimes.push(tApex.toFixed(4));
-      xValues.push(c.x - STEP * 0.4);
-      yValues.push(peakY);
-    }
+  // Build the full 7-row contribution graph grid
+  const cellRects = [];
+  weeks.forEach((week, wi) => {
+    const x = PADDING_LEFT + wi * STEP;
+    week.forEach((day, di) => {
+      if (!day) return; // skip padding days at the beginning/end of the year
+      const level = day.level;
+      const landable = level > 0;
+      const strokeColor = landable
+        ? (isDark ? "#2ea043" : "#40c463")
+        : (isDark ? "#30363d" : "#e1e4e8");
+      cellRects.push(`<rect x="${x}" y="${PADDING_TOP + di * STEP}" width="${CELL}" height="${CELL}" rx="2" ry="2" fill="${LEVEL_COLORS[level]}" stroke="${strokeColor}" stroke-width="0.5">${day.date ? `<title>${day.date}: ${day.count} contributions</title>` : ""}</rect>`);
+    });
   });
 
-  // sort all keyframes by time while keeping x/y paired
-  const combined = xKeyTimes
-    .map((t, i) => ({ t: parseFloat(t), x: xValues[i], y: yValues[i] }))
-    .sort((a, b) => a.t - b.t);
+  const cellRectsStr = cellRects.join("\n    ");
 
-  // de-dup identical times, ensure starts at 0 and ends at 1
-  const seen = new Set();
-  const frames = [];
-  combined.forEach((f) => {
-    const key = f.t.toFixed(4);
-    if (!seen.has(key)) {
-      seen.add(key);
-      frames.push(f);
-    }
+  // Mario physics coordinates setup
+  // We represent columns including virtual starting (off-screen left) and ending (off-screen right)
+  const columns = [];
+  
+  // Mario offset so his feet are exactly on the line
+  const MARIO_OFFSET_Y = 6;
+
+  // Virtual column -1: starting off-screen left on the ground
+  columns.push({
+    left: -10,
+    right: -10,
+    y: groundY - MARIO_OFFSET_Y,
+    isGround: true,
   });
-  if (frames[0].t !== 0) frames.unshift({ t: 0, x: frames[0].x, y: frames[0].y });
-  if (frames[frames.length - 1].t !== 1) {
-    const last = frames[frames.length - 1];
-    frames.push({ t: 1, x: last.x, y: last.y });
+
+  let lastRow = 'ground';
+  for (let c = 0; c < numWeeks; c++) {
+    const greenRows = [];
+    const week = weeks[c];
+    for (let r = 0; r < 7; r++) {
+      const day = week[r];
+      if (day && day.level > 0) {
+        greenRows.push(r);
+      }
+    }
+
+    const left = PADDING_LEFT + c * STEP;
+    const right = left + CELL;
+
+    if (greenRows.length > 0) {
+      // Find the closest green row to Mario's current row
+      let bestRow = greenRows[0];
+      let minDiff = Math.abs(bestRow - (lastRow === 'ground' ? 7 : lastRow));
+      for (let idx = 1; idx < greenRows.length; idx++) {
+        const r = greenRows[idx];
+        const diff = Math.abs(r - (lastRow === 'ground' ? 7 : lastRow));
+        if (diff < minDiff) {
+          minDiff = diff;
+          bestRow = r;
+        } else if (diff === minDiff) {
+          // Tie-breaker: choose higher level contribution
+          const dayR = week[r];
+          const dayBest = week[bestRow];
+          if (dayR && dayBest && dayR.level > dayBest.level) {
+            bestRow = r;
+          }
+        }
+      }
+      lastRow = bestRow;
+      const y = PADDING_TOP + bestRow * STEP - MARIO_OFFSET_Y;
+      columns.push({ left, right, y, isGround: false });
+    } else {
+      lastRow = 'ground';
+      const y = groundY - MARIO_OFFSET_Y;
+      columns.push({ left, right, y, isGround: true });
+    }
   }
 
-  const keyTimes = frames.map((f) => f.t.toFixed(4)).join(";");
-  const xVals = frames.map((f) => f.x.toFixed(1)).join(";");
-  const yVals = frames.map((f) => f.y.toFixed(1)).join(";");
+  // Virtual column N: ending off-screen right on the ground
+  columns.push({
+    left: width + 10,
+    right: width + 10,
+    y: groundY - MARIO_OFFSET_Y,
+    isGround: true,
+  });
 
-  // Simple 16x16-ish blocky Mario built from rects (no external assets,
-  // renders anywhere GitHub displays SVG).
+  // Build keyframes sequence
+  const keyframes = [];
+  for (let i = 0; i < columns.length; i++) {
+    const col = columns[i];
+    // Land at the left edge of the column
+    keyframes.push({ x: col.left, y: col.y });
+    // Walk flat to the right edge of the column
+    keyframes.push({ x: col.right, y: col.y });
+
+    // Transition to the next column
+    if (i < columns.length - 1) {
+      const nextCol = columns[i + 1];
+      const shouldJump = !col.isGround || !nextCol.isGround;
+
+      if (shouldJump) {
+        const xApex = (col.right + nextCol.left) / 2;
+        let yApex = Math.min(col.y, nextCol.y) - jumpHeight;
+        // Clamp y to prevent Mario from getting cut off at the top (Mario cap is at y - 16)
+        yApex = Math.max(16, yApex);
+        keyframes.push({ x: xApex, y: yApex });
+      }
+    }
+  }
+
+  // De-duplicate keyframes at the exact same horizontal coordinate
+  const uniqueKeyframes = [];
+  keyframes.forEach((kf) => {
+    if (uniqueKeyframes.length === 0 || uniqueKeyframes[uniqueKeyframes.length - 1].x !== kf.x) {
+      uniqueKeyframes.push(kf);
+    }
+  });
+
+  const xStart = uniqueKeyframes[0].x;
+  const xEnd = uniqueKeyframes[uniqueKeyframes.length - 1].x;
+  const totalX = xEnd - xStart;
+
+  // Scale times to horizontal distance for constant horizontal speed
+  const keyTimes = uniqueKeyframes.map((k) => ((k.x - xStart) / totalX).toFixed(4)).join(";");
+  const values = uniqueKeyframes.map((k) => `${k.x.toFixed(1)},${k.y.toFixed(1)}`).join(";");
+  const totalDuration = Math.max(numWeeks * 0.45, 6); // seconds, scales with weeks
+
+  // Simple 16x16-ish blocky Mario built from rects
   const mario = `
   <g id="mario">
     <!-- cap -->
@@ -183,30 +231,29 @@ function buildSvg(weeks, user) {
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" font-family="Helvetica,Arial,sans-serif">
   <style>
-    text { fill: #8b949e; font-size: 9px; }
+    text { fill: ${textColor}; font-size: 9px; }
   </style>
   <rect x="0" y="0" width="${width}" height="${height}" fill="transparent"/>
 
   <!-- contribution-style track -->
   <g>
-    ${cellRects}
+    ${cellRectsStr}
   </g>
 
   <!-- ground line -->
-  <line x1="${PADDING_LEFT - 4}" y1="${groundY}" x2="${width - PADDING_LEFT + 4}" y2="${groundY}" stroke="#30363d" stroke-width="1"/>
+  <line x1="${PADDING_LEFT - 4}" y1="${groundY}" x2="${width - PADDING_LEFT + 4}" y2="${groundY}" stroke="${groundColor}" stroke-width="1"/>
 
   <!-- Mario -->
-  <g transform="translate(${frames[0].x},${frames[0].y})">
+  <g transform="translate(${uniqueKeyframes[0].x},${uniqueKeyframes[0].y})">
     ${mario}
     <animateTransform attributeName="transform" type="translate"
-      values="${frames.map((f) => `${f.x.toFixed(1)},${f.y.toFixed(1)}`).join(";")}"
+      values="${values}"
       keyTimes="${keyTimes}"
       dur="${totalDuration}s"
       repeatCount="indefinite"
       calcMode="linear"/>
   </g>
-
-  <text x="${PADDING_LEFT}" y="${height - 1}">@${user} —  watch mario parkour !</text>
+  <text x="${PADDING_LEFT}" y="${height - 2}">@${user} —  watch mario parkour !</text>
 </svg>`;
 
   return svg;

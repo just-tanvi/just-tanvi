@@ -1,4 +1,4 @@
-# Tanvi Tiwari — Computer science and Engineering student, aspiring ML Engineer
+# Tanvi Tiwari — Computer science and Engineering student, aspiring Software Engineer
 
 I engineered a cross-browser extension for real-time claim verification, optimizing asynchronous API orchestration for sub-second latency. I also architected a four-layer ensemble detection pipeline that boosted fraud detection accuracy by 15% for Indian banks, processing 12 years of historical transaction data.
 

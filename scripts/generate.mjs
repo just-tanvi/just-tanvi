@@ -367,7 +367,7 @@ function buildSvg(weeks, user) {
     const tEnd = Math.min(0.9999, tStart + 0.015);
 
     pointTexts.push(`
-  <text x="${x.toFixed(1)}" y="${yStart.toFixed(1)}" opacity="0" font-family="'Courier New', Courier, monospace" font-weight="bold" font-size="8px" fill="${pointsColor}" text-anchor="middle">
+  <text class="score-point" x="${x.toFixed(1)}" y="${yStart.toFixed(1)}" opacity="0" text-anchor="middle">
     ${score}
     <animate attributeName="opacity"
       values="0;0;1;0;0"
@@ -402,9 +402,26 @@ function buildSvg(weeks, user) {
     <rect x="1" y="2" width="5" height="4" fill="#3a2412"/>
   </g>`;
 
+  const keyframesCss = uniqueKeyframes.map((k) => {
+    const pct = (((k.x - xStart) / totalX) * 100).toFixed(2);
+    return `    ${pct}% { transform: translate(${k.x.toFixed(1)}px, ${k.y.toFixed(1)}px); }`;
+  }).join("\n");
+
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" font-family="Helvetica,Arial,sans-serif">
   <style>
     text { fill: ${textColor}; font-size: 9px; }
+    .score-point {
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: bold;
+      font-size: 8px;
+      fill: ${pointsColor};
+    }
+    @keyframes mario-walk {
+${keyframesCss}
+    }
+    #mario-group {
+      animation: mario-walk ${totalDuration}s linear infinite;
+    }
   </style>
   <rect x="0" y="0" width="${width}" height="${height}" fill="transparent"/>
 
@@ -420,14 +437,8 @@ function buildSvg(weeks, user) {
   ${shellSvgsStr}
 
   <!-- Mario -->
-  <g transform="translate(${uniqueKeyframes[0].x},${uniqueKeyframes[0].y})">
+  <g id="mario-group">
     ${mario}
-    <animateTransform attributeName="transform" type="translate"
-      values="${values}"
-      keyTimes="${keyTimes}"
-      dur="${totalDuration}s"
-      repeatCount="indefinite"
-      calcMode="linear"/>
   </g>
 
   <!-- points floating animation -->

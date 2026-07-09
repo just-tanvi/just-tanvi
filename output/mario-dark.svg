@@ -145,10 +145,11 @@
     91.97% { transform: translate(778.0px, 64.0px); }
     92.61% { transform: translate(783.5px, 38.0px); }
     93.25% { transform: translate(789.0px, 64.0px); }
-    93.48% { transform: translate(791.0px, 64.0px); }
-    94.00% { transform: translate(795.5px, 53.0px); }
-    94.53% { transform: translate(800.0px, 139.0px); }
-    95.93% { transform: translate(812.0px, 139.0px); }
+    93.66% { transform: translate(792.5px, 64.0px); }
+    94.34% { transform: translate(798.4px, 38.0px); }
+    95.02% { transform: translate(804.3px, 79.0px); }
+    95.26% { transform: translate(806.3px, 79.0px); }
+    97.40% { transform: translate(824.6px, 65.0px); }
     99.53% { transform: translate(843.0px, 139.0px); }
     100.00% { transform: translate(847.0px, 139.0px); }
     }
@@ -527,7 +528,8 @@
     <rect x="800" y="40" width="12" height="12" rx="2" ry="2" fill="#161b22" stroke="#30363d" stroke-width="0.5"><title>2026-07-05: 0 contributions</title></rect>
     <rect x="800" y="55" width="12" height="12" rx="2" ry="2" fill="#161b22" stroke="#30363d" stroke-width="0.5"><title>2026-07-06: 0 contributions</title></rect>
     <rect x="800" y="70" width="12" height="12" rx="2" ry="2" fill="#161b22" stroke="#30363d" stroke-width="0.5"><title>2026-07-07: 0 contributions</title></rect>
-    <rect x="800" y="85" width="12" height="12" rx="2" ry="2" fill="#161b22" stroke="#30363d" stroke-width="0.5"><title>2026-07-08: 0 contributions</title></rect>
+    <rect x="800" y="85" width="12" height="12" rx="2" ry="2" fill="#0e4429" stroke="#2ea043" stroke-width="0.5"><title>2026-07-08: 4 contributions</title></rect>
+    <rect x="800" y="100" width="12" height="12" rx="2" ry="2" fill="#161b22" stroke="#30363d" stroke-width="0.5"><title>2026-07-09: 0 contributions</title></rect>
   </g>
 
   <!-- ground line -->
@@ -916,6 +918,20 @@
     <animate attributeName="y"
       values="46.0;46.0;34.0;34.0"
       keyTimes="0;0.9325;0.9475;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+  </text>
+  
+  <text class="score-point" x="804.3" y="61.0" opacity="0" text-anchor="middle">
+    +10
+    <animate attributeName="opacity"
+      values="0;0;1;0;0"
+      keyTimes="0;0.9502;0.9502;0.9652;1"
+      dur="23.85s"
+      repeatCount="indefinite"/>
+    <animate attributeName="y"
+      values="61.0;61.0;49.0;49.0"
+      keyTimes="0;0.9502;0.9652;1"
       dur="23.85s"
       repeatCount="indefinite"/>
   </text>

@@ -523,9 +523,10 @@
     <rect x="785" y="70" width="12" height="12" rx="2" ry="2" fill="#ebedf0" stroke="#e1e4e8" stroke-width="0.5"><title>2026-07-28: 0 contributions</title></rect>
     <rect x="785" y="85" width="12" height="12" rx="2" ry="2" fill="#9be9a8" stroke="#40c463" stroke-width="0.5"><title>2026-07-29: 7 contributions</title></rect>
     <rect x="785" y="100" width="12" height="12" rx="2" ry="2" fill="#40c463" stroke="#40c463" stroke-width="0.5"><title>2026-07-30: 9 contributions</title></rect>
-    <rect x="785" y="115" width="12" height="12" rx="2" ry="2" fill="#40c463" stroke="#40c463" stroke-width="0.5"><title>2026-07-31: 14 contributions</title></rect>
+    <rect x="785" y="115" width="12" height="12" rx="2" ry="2" fill="#30a14e" stroke="#40c463" stroke-width="0.5"><title>2026-07-31: 20 contributions</title></rect>
     <rect x="785" y="130" width="12" height="12" rx="2" ry="2" fill="#ebedf0" stroke="#e1e4e8" stroke-width="0.5"><title>2026-08-01: 0 contributions</title></rect>
     <rect x="800" y="40" width="12" height="12" rx="2" ry="2" fill="#ebedf0" stroke="#e1e4e8" stroke-width="0.5"><title>2026-08-02: 0 contributions</title></rect>
+    <rect x="800" y="55" width="12" height="12" rx="2" ry="2" fill="#ebedf0" stroke="#e1e4e8" stroke-width="0.5"><title>2026-08-03: 0 contributions</title></rect>
   </g>
 
   <!-- ground line -->
@@ -933,7 +934,7 @@
   </text>
   
   <text class="score-point" x="789.0" y="91.0" opacity="0" text-anchor="middle">
-    +30
+    +50
     <animate attributeName="opacity"
       values="0;0;1;0;0"
       keyTimes="0;0.9325;0.9325;0.9475;1"
